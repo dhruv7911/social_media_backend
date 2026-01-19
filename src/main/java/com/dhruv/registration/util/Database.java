@@ -11,16 +11,18 @@ public class Database{
 	private static Connection connection = null;
 	
 	public static Connection getConnection() {
-		try {
-			if(connection ==null || connection.isClosed()) {
-//				Class.forName("com.mysql.cj.jdbc.driver");
-				connection = DriverManager.getConnection(URL,USERNAME,PASSWORD); 
-				System.out.println("connection success");
-				}
-		}catch(SQLException e) {
-			System.err.println("Database Connection failed: "+e.getMessage());
-		}
-		return connection;
+	    try {
+	        if(connection == null || connection.isClosed()) {
+	            Class.forName("com.mysql.cj.jdbc.Driver"); // Capital 'D' in Driver
+	            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD); 
+	            System.out.println("connection success");
+	        }
+	    } catch(SQLException e) {
+	        System.err.println("Database Connection failed: " + e.getMessage());
+	    } catch(ClassNotFoundException e) {
+	        System.err.println("MySQL Driver not found: " + e.getMessage());
+	    }
+	    return connection;
 	}
 	public static void closeConnection() {
 		try {
