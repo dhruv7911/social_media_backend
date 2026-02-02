@@ -1,10 +1,10 @@
 <web-app>
 	<servlet>
-		<servlet-name>Registration</servlet-name>
+		<servlet-name>Register</servlet-name>
 		<servlet-class>com.dhruv.registration.controller.Registration</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>Registration</servlet-name>
-		<url-pattern>/api/register</url-pattern>
+		<servlet-name>Register</servlet-name>
+		<url-pattern>/register</url-pattern>
 	</servlet-mapping>
 </web-app>

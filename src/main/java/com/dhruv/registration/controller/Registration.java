@@ -1,24 +1,27 @@
 package com.dhruv.registration.controller;
 
-import java.util.UUID;
-import org.mindrot.jbcrypt.BCrypt;
-import jakarta.servlet.*;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.*;
-import java.io.PrintWriter;
-import java.io.IOException;
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+
+import org.mindrot.jbcrypt.BCrypt;
+
+import com.dhruv.registration.dao.UserDao;
+//defined classes
+import com.dhruv.registration.model.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonSerializer;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializer;
 
-//defined classes
-import com.dhruv.registration.model.User;
-import com.dhruv.registration.dao.UserDao;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class Registration extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -28,13 +31,13 @@ public class Registration extends HttpServlet {
 	public void init() throws ServletException {
 		// Create Gson with LocalDateTime support
 		gson = new GsonBuilder()
-				.registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, type, context) -> {
+				.registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, _, _) -> {
 					String dateTime = json.getAsString();
 					if (dateTime == null || dateTime.isEmpty()) {
 						return null;
 					}
 					return LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-				}).registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (src, type, context) -> {
+				}).registerTypeAdapter(LocalDateTime.class, (JsonSerializer<LocalDateTime>) (src, _, context) -> {
 					if (src == null) {
 						return null;
 					}
