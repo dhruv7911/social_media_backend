@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Database{
-	private static final String URL = "jdbc:mysql://localhost:3306/social_media";
+	private static final String URL = "jdbc:mysql://host.docker.internal:3306/social_media";
 	private static final String USERNAME = "root";
 	private static final String PASSWORD = "root";
 	private static Connection connection = null;
