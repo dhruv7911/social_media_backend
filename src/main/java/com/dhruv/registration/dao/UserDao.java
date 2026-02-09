@@ -1,6 +1,7 @@
 package com.dhruv.registration.dao;
 import com.dhruv.registration.model.User;
 import com.dhruv.registration.util.Database;
+import com.dhruv.registration.model.Token;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,8 +18,16 @@ public class UserDao{
 			+ "Username,"
 			+ "CreatedAt,"
 			+ "LastLoginAt,"
-			+ "ProfilePictureUrl"
-			+ ")VALUES(?,?,?,?,NOW(),NOW(),?)";
+			+ "ProfilePictureUrl,"
+			+ "TokenId"
+			+ ")VALUES(?,?,?,?,NOW(),NOW(),?,?)";
+	private static final String INSERT_TOKEN = "INSERT INTO Tokens("
+			+"TokenId,"
+			+"UserId,"
+			+"isVerified,"
+			+"code,"
+			+"CreatedAt"
+			+")VALUES(?,?,?,?,NOW())";
 	public static boolean isEmailExists(String email) {
 		boolean result = false;
 		try(Connection conn = Database.getConnection();
@@ -53,6 +62,26 @@ public class UserDao{
 		}
 		return result;
 	}
+   public static boolean insertToken(Token token) {
+		boolean result = false;
+		try(Connection conn = Database.getConnection();
+				PreparedStatement ps = conn.prepareStatement(INSERT_TOKEN);
+					){
+			ps.setString(1,token.getTokenId());
+			ps.setString(2, token.getUserId());
+			ps.setBoolean(3, token.getisVerified());
+			ps.setInt(4,token.getCode());
+			int rowAffected = ps.executeUpdate();
+			if(rowAffected>0) {
+				result =true;
+			}
+			
+			
+		}catch(SQLException e) {
+			System.err.println(e.getMessage());
+		}
+		return result;
+	}
 	public static boolean insertUser(User user) {
 		boolean result = false;
 		try(Connection conn = Database.getConnection();
@@ -63,12 +92,18 @@ public class UserDao{
 			ps.setString(3, user.getPassword());
 			ps.setString(4, user.getUsername());
 			ps.setString(5,null);
+			ps.setString(6, user.getTokenId());
 			int rowAffected = ps.executeUpdate();
-			result = rowAffected > 0;
+			if(rowAffected > 0) {
+				Token token = new Token(user.getTokenId(),user.getUserId(),false,((int)(Math.random()*900000)));
+				result = insertToken(token);
+				
+			}
 		}catch(SQLException e) {
 			System.err.println(e.getMessage());
 		}
 		return result;
+		
 	}
-	
+
 }

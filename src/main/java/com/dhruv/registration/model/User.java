@@ -9,8 +9,9 @@ public class User{
 	private String Password;
 	private String ConfirmPassword;
 	private String ProfilePictureUrl;
+	private String TokenId;
 	//constructor;
-	public User(String UserId,String Username,String Email,LocalDateTime LastLoginAt,String Password,String ConfirmPassword,String ProfilePictureUrl) {
+	public User(String UserId,String Username,String Email,LocalDateTime LastLoginAt,String Password,String ConfirmPassword,String ProfilePictureUrl,String TokenId) {
 		this.UserId = UserId;
 		this.Username = Username;
 		this.Email = Email;
@@ -18,6 +19,7 @@ public class User{
 		this.Password = Password;
 		this.ConfirmPassword=ConfirmPassword;
 		this.ProfilePictureUrl = ProfilePictureUrl;
+		this.TokenId = TokenId;
 	}
 	//getter and setter;
 	public void setUserId(String x) {
@@ -68,5 +70,11 @@ public class User{
 	}
 	public String getProfilePictureUrl() {
 		return this.ProfilePictureUrl;
+	}
+	public void setTokenId(String x) {
+		this.TokenId = x;
+	}
+	public String getTokenId() {
+		return this.TokenId;
 	}
 }

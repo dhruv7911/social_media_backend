@@ -1,5 +1,4 @@
 package com.dhruv.registration.controller;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -140,7 +139,9 @@ public class Registration extends HttpServlet {
 		// everything is fine then insert user details in database (Users Table)
 
 		String UserId = UUID.randomUUID().toString();
+		String TokenId = UUID.randomUUID().toString();//creating TokenId for Tokens table
 		user.setUserId(UserId);
+		user.setTokenId(TokenId);
 		String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12));
 		user.setPassword(hashedPassword);
 		
