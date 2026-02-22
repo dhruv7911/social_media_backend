@@ -30,8 +30,13 @@
 			<version>2.13.2</version>
 			<scope>compile</scope>
 		</dependency>
-		
-		
+		<!-- Jakarta Mail API -->
+		<dependency>
+			<groupId>jakarta.mail</groupId>
+			<artifactId>jakarta.mail-api</artifactId>
+			<version>2.0.0</version>
+			<scope>compile</scope>
+		</dependency>
 		<!-- Jakarta Servlet API -->
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
