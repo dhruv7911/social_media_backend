@@ -82,28 +82,26 @@ public class UserDao{
 		}
 		return result;
 	}
-	public static boolean insertUser(User user) {
-		boolean result = false;
-		try(Connection conn = Database.getConnection();
-			PreparedStatement ps = conn.prepareStatement(INSERT_NEW_USER);
-				){
-			ps.setString(1, user.getUserId());
-			ps.setString(2, user.getEmail());
-			ps.setString(3, user.getPassword());
-			ps.setString(4, user.getUsername());
-			ps.setString(5,null);
-			ps.setString(6, user.getTokenId());
-			int rowAffected = ps.executeUpdate();
-			if(rowAffected > 0) {
-				Token token = new Token(user.getTokenId(),user.getUserId(),false,((int)(Math.random()*900000)));
-				result = insertToken(token);
-				
-			}
-		}catch(SQLException e) {
-			System.err.println(e.getMessage());
-		}
-		return result;
-		
-	}
+	public static Token insertUser(User user) {
+    Token token = null;
+    try(Connection conn = Database.getConnection();
+        PreparedStatement ps = conn.prepareStatement(INSERT_NEW_USER)){
+        ps.setString(1, user.getUserId());
+        ps.setString(2, user.getEmail());
+        ps.setString(3, user.getPassword());
+        ps.setString(4, user.getUsername());
+        ps.setString(5, null);
+        ps.setString(6, user.getTokenId());
+        int rowAffected = ps.executeUpdate();
+        if(rowAffected > 0) {
+            int code = 100000 + (int)(Math.random() * 900000);
+            token = new Token(user.getTokenId(), user.getUserId(), false, code);
+            insertToken(token);
+        }
+    }catch(SQLException e) {
+        System.err.println(e.getMessage());
+    }
+    return token;
+}
 
 }

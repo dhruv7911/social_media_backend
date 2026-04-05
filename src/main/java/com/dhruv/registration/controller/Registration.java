@@ -1,5 +1,7 @@
 package com.dhruv.registration.controller;
 import java.io.BufferedReader;
+import com.dhruv.registration.util.Email;
+import com.dhruv.registration.model.Token;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
@@ -145,12 +147,19 @@ public class Registration extends HttpServlet {
 		String hashedPassword = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt(12));
 		user.setPassword(hashedPassword);
 		
-		if(UserDao.insertUser(user)) {
-			json.addProperty("status", "success");
-			json.addProperty("message", "registered Successfully");
-			PrintWriter out = res.getWriter();
-			out.println(json);
-			return;
+		Token token = UserDao.insertUser(user);
+
+		if(token != null) {
+		    try {
+		        Email.sendOTPEmail(user.getEmail(), token.getCode());
+		    }catch(Exception e) {
+		        System.err.println("Email sending failed:" + e.getMessage());
+		    }
+		    json.addProperty("status", "success");
+		    json.addProperty("message", "user insert Successfully");
+		    PrintWriter out = res.getWriter();
+		    out.println(json);
+		    return;
 		}
 	}
 }
